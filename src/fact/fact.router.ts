@@ -32,13 +32,12 @@ factRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 // POST: Create a Fact
-// Params: label,fact,type (0 = RootNode , 1 = IntermediateNode ,2 = TerminalNode)
+// Params: label,fact
 
 factRouter.post(
   "/",
   body("label").isString(),
   body("fact").isString(),
-  body("type").isInt(),
   async (req: Request, res: Response) => {
     // ดัก Error validation
     const errors = validationResult(req);

@@ -4,7 +4,6 @@ type Fact = {
     id: string;
     label: string;
     fact: string | null;
-    type: number;
   };
 
 
@@ -14,7 +13,6 @@ export const listFacts = async (): Promise<Fact[]> => {
             id: true,
             label: true,
             fact: true,
-            type: true,
         }
     });
 };
@@ -28,17 +26,15 @@ export const getFacts = async (id: string): Promise<Fact | null> => {
 };
 
 export const createFact = async (factInput: Omit<Fact, "id">): Promise<Fact> => {
-    const { label, fact, type } = factInput;
+    const { label, fact } = factInput;
     return db.fact.create({
         data: {
             label,
             fact,
-            type,
         },
         select: {
             id: true,
             label: true,
-            type: true,
             fact: true,
         }
     });
@@ -58,7 +54,6 @@ export const updateFact = async(factInput: Omit<Fact, "id">, id: string): Promis
             id: true,
             label: true,
             fact: true,
-            type: true
         }
     });
 };
