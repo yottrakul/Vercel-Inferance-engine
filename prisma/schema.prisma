@@ -14,7 +14,6 @@ model Fact{
   id String @id @default(uuid())
   label String @unique
   fact String?
-  type Int @default(1)
   preRule1 Rule[] @relation("preFact1")
   preRule2 Rule[] @relation("preFact2")
   postRule1 Rule[] @relation("postFact1")

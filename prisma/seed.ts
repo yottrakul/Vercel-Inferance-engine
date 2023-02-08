@@ -3,7 +3,6 @@ import { db } from "../src/utils/db.server";
 type Fact = {
   label: string;
   fact?: string;
-  type: number;
 };
 
 // Fact เริ่มต้นใส่ตรงนี้
@@ -11,73 +10,30 @@ type Fact = {
 const rootLabel: string[] = ["w", "q", "d", "m"];
 const terminal: string[] = ["s", "r"];
 const intermediate: string[] = ["x", "y", "g", "z", "a", "b", "e", "c", "f"]
+const allFacts: string[] = [...rootLabel,...terminal,...intermediate];
 
 // สิ้นสุด
 
 async function seed() {
-  
-  await Promise.all(
-    getRootNode().map(node => {
-      return db.fact.create({
-        data: {
-          label: node.label,
-          type: 0
-        }
-      });
-    })
-  );
 
   await Promise.all(
-    getIntermediateNode().map(node => {
+    getFacts().map(fact => {
       return db.fact.create({
         data: {
-          label: node.label
+          label: fact.label,
+          fact: fact.fact
         }
-      });
+      })
     })
-  );
-
-  await Promise.all(
-    getTerminalNode().map(node => {
-      return db.fact.create({
-        data: {
-          label: node.label,
-          type: 2
-        }
-      });
-    })
-  );
-  
+  )
 }
 
 seed();
 
-function getRootNode(): Array<Fact>{
-  const result: Array<Fact> = rootLabel.map(item => {
+function getFacts(): Array<Fact> {
+  return allFacts.map(fact => {
     return {
-      label: item,
-      type: 0
+      label: fact,
     }
   })
-  return result;
-}
-
-function getIntermediateNode(): Array<Fact>{
-  const result: Array<Fact> = intermediate.map(item => {
-    return {
-      label: item,
-      type: 1
-    }
-  })
-  return result;
-}
-
-function getTerminalNode(): Array<Fact>{
-  const result: Array<Fact> = terminal.map(item => {
-    return {
-      label: item,
-      type: 2
-    }
-  })
-  return result;
 }
