@@ -93,7 +93,7 @@ ruleRouter.delete("/:id", async (req: Request, res: Response) => {
     const id: string = req.params.id;
     try {
         await RuleService.deleteRule(id);
-        return res.status(200).json({status: "200", msg: `Fact '${id}' is deleted`})
+        return res.status(200).json({status: "200", msg: `Rule '${id}' is deleted`})
     } catch (error: any) {
         return res.status(500).json({error: error.message});
     }

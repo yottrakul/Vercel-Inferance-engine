@@ -1,4 +1,3 @@
-import { updateFact } from "./../fact/fact.service";
 import { db } from "../utils/db.server";
 
 type Rule = {
@@ -41,8 +40,8 @@ export const createRule = async (
   } = ruleInput;
 
   // pre,postExp รับแค่ค่า "AND", "OR", null
-  const preExpInvalid = (preExp !== "AND") && (preExp !== "OR") && (preExp !== null);
-  const postExpInvalid = (postExp !== "AND") && (postExp !== "OR") && (postExp !== null);
+  const preExpInvalid = (preExp !== "AND") && (preExp !== "OR") && (preExp !== null) && (preExp !== undefined);
+  const postExpInvalid = (postExp !== "AND") && (postExp !== "OR") && (postExp !== null) && (postExp !== undefined);
 
   if(preExpInvalid || postExpInvalid) {
     throw Error("Invalid: please use 'AND', 'OR', null in preExp, postExp ")
@@ -77,7 +76,7 @@ export const createRule = async (
   }
 
   // เมื่อ pre, post fact เป็น null
-  if(preFactId_1 === null || postFactId_2 === null) {
+  if(preFactId_1 === null || postFactId_1 === null) {
     throw Error("Invalid: First Fact can't be null")
   }
 
@@ -162,7 +161,7 @@ export const updateRule = async (
 };
 
 export const deleteRule = async(id: string): Promise<void> => {
-    await db.fact.delete({
+    await db.rule.delete({
         where: {
             id
         }

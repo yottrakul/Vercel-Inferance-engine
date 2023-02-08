@@ -4,6 +4,7 @@ import cors from "cors";
 
 import { factRouter } from "./fact/fact.router";
 import { ruleRouter } from "./rule/rule.router";
+import { infernceEngineRouter } from "./infernce_engine/infernce.router"
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/facts", factRouter);
 app.use("/api/rules", ruleRouter);
+app.use("/api/infer_engine", infernceEngineRouter);
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
