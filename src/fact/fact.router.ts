@@ -8,7 +8,7 @@ export const factRouter = express.Router();
 
 // GET: List of all Facts
 factRouter.get("/", async (req: Request, res: Response) => {
-  console.log("This OK");
+  // console.log("This OK");
   try {
     const facts = await FactService.listFacts();
     return res.status(200).json(facts);
@@ -84,7 +84,7 @@ factRouter.delete("/:id", async(req: Request, res: Response) => {
   const id = req.params.id;
   try {
     await FactService.deleteFact(id);
-    return res.status(200).json({status: "fact deleted."})
+    return res.status(200).json({status: "200", msg: `Fact '${id}' is deleted`})
   } catch (error: any) {
     return res.status(500).json({error: error.message});
   }

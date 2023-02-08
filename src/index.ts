@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 
 import { factRouter } from "./fact/fact.router";
+import { ruleRouter } from "./rule/rule.router";
 
 dotenv.config();
 
@@ -13,11 +14,11 @@ if(!process.env.PORT) {
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
 const app = express();
-const router = express.Router();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/facts", factRouter);
+app.use("/api/rules", ruleRouter);
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
