@@ -1,0 +1,92 @@
+import express from "express";
+import type { Request, Response } from "express";
+import { body, validationResult } from "express-validator";
+
+import * as FactService from "./fact.service";
+
+export const factRouter = express.Router();
+
+// GET: List of all Facts
+factRouter.get("/", async (req: Request, res: Response) => {
+  console.log("This OK");
+  try {
+    const facts = await FactService.listFacts();
+    return res.status(200).json(facts);
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+});
+
+//GET: A single fact by ID
+factRouter.get("/:id", async (req: Request, res: Response) => {
+  const id: string = req.params.id;
+  try {
+    const fact = await FactService.getFacts(id);
+    if (fact) {
+      return res.status(200).json(fact);
+    }
+    return res.status(404).json({ error: "Fact could not be found" });
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+});
+
+// POST: Create a Fact
+// Params: label,fact,type (0 = RootNode , 1 = IntermediateNode ,2 = TerminalNode)
+
+factRouter.post(
+  "/",
+  body("label").isString(),
+  body("fact").isString(),
+  body("type").isInt(),
+  async (req: Request, res: Response) => {
+    // ดัก Error validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log("Error");
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const fact = req.body;
+      const newFact = await FactService.createFact(fact);
+      return res.status(201).json(newFact);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+);
+
+// PUT: Update label,fact
+// Params: label,fact (label = ชื่อเล่น Fact, fact = รายละเอียดของ fact)
+
+factRouter.put(
+  "/:id",
+  body("label").isString(),
+  body("fact").isString(),
+  async (req: Request, res: Response) => {
+    // ดัก Error validation
+    const errors = validationResult(req);
+    const id: string = req.params.id;
+    if(!errors.isEmpty()) {
+      return res.status(400).json({errors: errors.array()})
+    }
+
+    try {
+      const fact = req.body;
+      const updateFact = await FactService.updateFact(fact, id);
+      return res.status(200).json(updateFact);
+    } catch (error: any) {
+      return res.status(500).json({error: error.message})
+    }
+  }
+);
+
+factRouter.delete("/:id", async(req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    await FactService.deleteFact(id);
+    return res.status(200).json({status: "fact deleted."})
+  } catch (error: any) {
+    return res.status(500).json({error: error.message});
+  }
+})

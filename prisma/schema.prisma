@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Fact{
+  id String @id @default(uuid())
+  label String @unique
+  fact String?
+  type Int @default(1)
+  preRule1 Rule[] @relation("preFact1")
+  preRule2 Rule[] @relation("preFact2")
+  postRule1 Rule[] @relation("postFact1")
+  postRule2 Rule[] @relation("postFact2")
+}
+
+// Root Node = 0
+// Intermediate Node = 1 --> Default
+// Terminal Node = 2
+
+model Rule{
+  id String @id @default(uuid())
+  preFact_1 Fact @relation("preFact1" ,fields: [preFactId_1], references: [id], onDelete: Cascade)
+  preFactId_1 String
+  preExp String?
+  preFact_2 Fact? @relation("preFact2" ,fields: [preFactId_2], references: [id], onDelete: Cascade)
+  preFactId_2 String?
+  postFact_1 Fact @relation("postFact1" ,fields: [postFactId_1], references: [id], onDelete: Cascade)
+  postFactId_1 String
+  postExp String?
+  postFact_2 Fact? @relation("postFact2" ,fields: [postFactId_2], references: [id], onDelete: Cascade)
+  postFactId_2 String?
+}
