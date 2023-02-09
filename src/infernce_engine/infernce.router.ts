@@ -3,6 +3,7 @@ import type { Request, Response } from "express"
 import { body, validationResult } from "express-validator"
 
 import * as InfernceEngineService from "./infernce.service"
+import { Fact,Rule,State } from "./infernce.service"
 
 export const infernceEngineRouter = express.Router();
 
@@ -18,9 +19,10 @@ infernceEngineRouter.get("/", async (req: Request, res: Response) => {
 })
 
 // GET RootNode
-infernceEngineRouter.get("/root", async (req: Request, res: Response) => {
+infernceEngineRouter.get("/start", async (req: Request, res: Response) => {
     try {
-        const result = await InfernceEngineService.start();
+        const state: State = req.body;
+        const result = await InfernceEngineService.start(state);
         return res.status(200).json(result);
     } catch (error: any) {
         return res.status(500).json({error: error.message})

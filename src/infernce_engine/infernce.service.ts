@@ -1,6 +1,6 @@
 import { db } from "../utils/db.server";
 
-type Rule = {
+export type Rule = {
     id: string;
     preFactId_1: string;
     preExp: string | null;
@@ -14,11 +14,21 @@ type Rule = {
     postFact_2: Fact | null;
 };
 
-type Fact = {
+export type Fact = {
     id: string;
     label: string;
     fact: string | null;
 };
+
+export type State = {
+    kb: Array<Rule> | null,
+    bb: Array<Fact> | null,
+    save_query: Array<Fact> | null,
+    query: Fact | null
+    result: Array<Fact> | null,
+    startNode: Array<Fact> | null,
+    concludNode: Array<Fact> | null
+}
 
 // List KB
 export const listKB = async(): Promise<Rule[]> => {
@@ -26,17 +36,20 @@ export const listKB = async(): Promise<Rule[]> => {
 } 
 
 // StartEngine
-export const start = async() => {
-    //Load KB
-    const KB = await loadKB();
+export const start = async(state: State): Promise<State> => {
 
-    //Check Starting Node
-    const startNodes = getStartingNodes(KB);
+    // ถ้ายังไม่มี KB ใน State
+    // ทำการสร้าง State ใหม่
+    if(state.kb === undefined) {
+        state = await initializationState(state);
+    }
+
+    // Get First Rule
+    // const firstRule = kb.
+
     
-    //Check Concluding Node
-    const concludingNodes = getConcludingNodes(KB);
 
-    console.log(startNodes)
+    return state
 
 }
 
@@ -50,6 +63,29 @@ async function loadKB(): Promise<Rule[]> {
             preFact_2: true,
         }
     });
+}
+
+// Initialization state
+async function initializationState(state: State): Promise<State> {
+    // Initialization state
+        // Load KB
+        const KB = await loadKB();
+        state.kb = KB;
+
+        //Check Starting Node
+        const startNodes = getStartingNodes(KB);
+        state.startNode = startNodes;
+
+        //Check Concluding Node
+        const concludingNodes = getConcludingNodes(KB);
+        state.concludNode = concludingNodes;
+
+        state.bb = [];
+        state.query = null;
+        state.result = [];
+        state.save_query = [];
+
+        return state;
 }
 
 // getStartingNodes
