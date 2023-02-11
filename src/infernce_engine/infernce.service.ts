@@ -124,6 +124,9 @@ export const start = async (state: State): Promise<State> => {
 
       // Premise is Starting Node?
       // Get first rule
+      if(RuleRemain ===0) {
+        break ruleRemain;
+      }
       const firstRule: Rule = state.kb[kb_counter];
 
       // Get first premise of the rule
