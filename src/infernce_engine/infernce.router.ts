@@ -19,7 +19,7 @@ infernceEngineRouter.get("/", async (req: Request, res: Response) => {
 })
 
 // GET RootNode
-infernceEngineRouter.get("/start", async (req: Request, res: Response) => {
+infernceEngineRouter.post("/start", async (req: Request, res: Response) => {
     try {
         const state: State = req.body;
         const result = await InfernceEngineService.start(state);

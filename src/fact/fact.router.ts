@@ -37,7 +37,7 @@ factRouter.get("/:id", async (req: Request, res: Response) => {
 factRouter.post(
   "/",
   body("label").isString(),
-  body("fact").isString(),
+  body("fact").isString().optional({nullable: true}),
   async (req: Request, res: Response) => {
     // ดัก Error validation
     const errors = validationResult(req);

@@ -89,6 +89,12 @@ export const createRule = async (
       postFactId_2,
       postExp,
     },
+    include: {
+      postFact_1: true,
+      postFact_2: true,
+      preFact_1: true,
+      preFact_2: true
+    }
   });
 };
 
@@ -141,7 +147,7 @@ export const updateRule = async (
   }
 
   // เมื่อ pre, post fact เป็น null
-  if(preFactId_1 === null || postFactId_2 === null) {
+  if(preFactId_1 === null || postFactId_1 === null) {
     throw Error("Invalid: First Fact can't be null")
   }
 
@@ -156,6 +162,12 @@ export const updateRule = async (
         postFactId_1,
         postFactId_2,
         postExp
+    },
+    include: {
+      preFact_1: true,
+      preFact_2: true,
+      postFact_1: true,
+      postFact_2: true
     }
   });
 };
