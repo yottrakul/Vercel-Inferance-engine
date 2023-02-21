@@ -1,3 +1,4 @@
+import { Fact } from './../infernce_engine/infernce.service';
 import { db } from "../utils/db.server";
 
 type Rule = {
@@ -8,6 +9,10 @@ type Rule = {
   postFactId_1: string;
   postExp: string | null;
   postFactId_2: string | null;
+  preFact_1: Fact;
+  preFact_2: Fact | null;
+  postFact_1: Fact;
+  postFact_2: Fact | null
 };
 
 // List Rules
@@ -16,7 +21,14 @@ type Rule = {
 // Delete a Rule
 
 export const listRules = async (): Promise<Rule[]> => {
-  return db.rule.findMany();
+  return db.rule.findMany({
+    include: {
+      postFact_1: true,
+      postFact_2: true,
+      preFact_1: true,
+      preFact_2: true,
+    }
+  });
 };
 
 export const getRule = async (id: string): Promise<Rule | null> => {
@@ -24,6 +36,12 @@ export const getRule = async (id: string): Promise<Rule | null> => {
     where: {
       id,
     },
+    include: {
+      postFact_1: true,
+      postFact_2: true,
+      preFact_1: true,
+      preFact_2: true,
+    }
   });
 };
 
@@ -90,10 +108,10 @@ export const createRule = async (
       postExp,
     },
     include: {
+      preFact_1: true,
+      preFact_2: true,
       postFact_1: true,
       postFact_2: true,
-      preFact_1: true,
-      preFact_2: true
     }
   });
 };
@@ -164,10 +182,10 @@ export const updateRule = async (
         postExp
     },
     include: {
-      preFact_1: true,
-      preFact_2: true,
       postFact_1: true,
-      postFact_2: true
+      postFact_2: true,
+      preFact_1: true,
+      preFact_2: true
     }
   });
 };
