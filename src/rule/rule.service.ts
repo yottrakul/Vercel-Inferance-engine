@@ -146,20 +146,20 @@ export const updateRule = async (
 
   // เมื่อ preExp มีการเปลี่ยนค่า
   if(preExp !== rule?.preExp) {
-    if((rule?.preFactId_2 !== null) && (preExp === null)) {
+    if((preFactId_2 !== null) && (preExp === null)) {
         throw Error("Invalid: please remove postFactId_2")
     }
-    if((rule?.preFactId_2 === null) && (preExp !== null)) {
+    if((preFactId_2 === null) && (preExp !== null)) {
         throw Error("Invalid: please add postFactId_2")
     } 
   }
 
   // เมื่อ postExp มีการเปลี่ยนค่า
   if(postExp !== rule?.postExp) {
-    if((rule?.postFactId_2 !== null) && (postExp === null)) {
+    if((postFactId_2 !== null) && (postExp === null)) {
         throw Error("Invalid: please remove postFactId_2")
     }
-    if((rule?.postFactId_2 === null) && (postExp !== null)) {
+    if((postFactId_2 === null) && (postExp !== null)) {
         throw Error("Invalid: please add postFactId_2")
     } 
   }
