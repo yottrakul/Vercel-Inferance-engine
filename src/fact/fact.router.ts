@@ -31,6 +31,20 @@ factRouter.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+// GET: Search Fact from message
+factRouter.get("/search/:msg", async (req: Request, res: Response) => {
+  const msg: string = req.params.msg;
+  try {
+    const facts = await FactService.findFacts(msg);
+    if (facts?.length !== 0) {
+      return res.status(200).json(facts);
+    }
+    return res.status(404).json({error: "No Fact Match"});
+  } catch (error: any) {
+    return res.status(500).json({error: error.message});
+  }
+})
+
 // POST: Create a Fact
 // Params: label,fact
 

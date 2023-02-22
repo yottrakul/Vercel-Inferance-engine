@@ -1,4 +1,8 @@
 import { db } from "../utils/db.server";
+var tnthai = require("tnthai");
+
+// tnthai Object
+const twc = new tnthai();
 
 type Fact = {
     id: string;
@@ -65,3 +69,27 @@ export const deleteFact = async(id: string): Promise<void> => {
         },
     });
 };
+
+export const findFacts = async(msg: string): Promise<Fact[]|undefined> => {
+    const {solution: words}:{solution: Array<string>} = twc.segmenting(msg);
+    // console.log(words);
+    if(words.length === 0){
+        return [];
+    }
+
+    const facts = await listFacts();
+    const factsResult: Array<Fact> = facts.filter(fact => {
+        //เช็คว่า Fact มี detail(fact) มั้ย?
+        if(!fact.fact) {
+            return words.some(word => {
+                return word.toLowerCase() === fact.label;
+            })
+        } else if (fact.label && fact.fact) {
+            return words.some(word => {
+                return word.toLowerCase() === fact.fact
+            })
+        }
+    })
+
+    return factsResult;
+}
