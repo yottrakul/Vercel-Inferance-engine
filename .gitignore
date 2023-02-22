@@ -47,3 +47,5 @@ yarn.lock
 .vscode/
 prisma/dev.db
 *.db
+prisma/dev.db
+*.db
