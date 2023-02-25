@@ -8,9 +8,9 @@ import { infernceEngineRouter } from "./infernce_engine/infernce.router"
 
 dotenv.config();
 
-if(!process.env.PORT) {
-    process.exit(1);
-}
+// if(!process.env.PORT) {
+//     process.exit(1);
+// }
 
 const PORT: number = parseInt(process.env.PORT as string, 10);
 
