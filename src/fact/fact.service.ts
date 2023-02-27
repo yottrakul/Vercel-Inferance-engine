@@ -86,6 +86,8 @@ export const findFacts = async(msg: string): Promise<Fact[]|undefined> => {
         return [];
     }
 
+    
+
     const facts = await listFacts();
     const factsResult: Array<Fact> = facts.filter(fact => {
         //เช็คว่า Fact มี detail(fact) มั้ย?
