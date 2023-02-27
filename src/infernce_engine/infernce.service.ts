@@ -1,4 +1,5 @@
 import { db } from "../utils/db.server";
+import { listFacts } from "../fact/fact.service"; 
 
 export type Rule = {
   id: string;
@@ -23,6 +24,7 @@ export type Fact = {
 export type State = {
   kb: Array<Rule>;
   bb: Array<Fact>;
+  facts: Array<Fact>;
   save_query: Array<Fact>;
   query: Array<Fact>;
   result: Array<Fact> | null;
@@ -42,6 +44,21 @@ export const start = async (state: State): Promise<State> => {
   if (state.kb === undefined) {
     state = await initializationState(state);
     return state;
+  }
+
+  //รวม Fact ซ้ำใน BB
+  if(state.bb.length > 0){
+    const arraySet = new Set<string>();
+    state.bb.forEach(item => {
+      arraySet.add(item.id)
+    })
+    const arrayNewBB = Array.from(arraySet);
+    const newBB = state.facts.filter((fact) => {
+      return arrayNewBB.some(item => {
+        return item === fact.id
+      })
+    })
+    state.bb = newBB;
   }
 
   // Rule remain?
@@ -223,6 +240,9 @@ async function initializationState(state: State): Promise<State> {
   // Load KB
   const KB = await loadKB();
   state.kb = KB;
+
+  const FACTS = await listFacts();
+  state.facts = FACTS;
 
   //Check Starting Node
   const startNodes = getStartingNodes(KB);
